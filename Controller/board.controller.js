@@ -1,5 +1,5 @@
 const { BoardModel } = require("../Model/board.model");
-
+var jwt = require("jsonwebtoken");
 const PostBoard = async (req, res) => {
   const payload = req.body;
   payload.name = "Todo";
@@ -26,4 +26,18 @@ const PostTask = async (req, res) => {
   }
 };
 
-module.exports = { PostBoard, PostTask };
+const GetBoard = async (req, res) => {
+  const token = req.headers.authorization;
+  try {
+    var decoded = jwt.verify(token, "mock15");
+    const userId = decoded.userId;
+    const board = await BoardModel.find({
+      userId,
+    });
+    res.status(200).send(board);
+  } catch (error) {
+    res.status(400).send({ message: error.message + "Not Authorized" });
+  }
+};
+
+module.exports = { PostBoard, PostTask, GetBoard };

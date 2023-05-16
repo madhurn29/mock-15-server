@@ -7,7 +7,7 @@ const RegisterUser = async (req, res) => {
   try {
     const ExistingUser = await UserModel.findOne({ email });
     if (ExistingUser) {
-      res.status(400).send({ message: "Already registered, Please Login " });
+      res.status(200).send({ message: "Already registered, Please Login " });
     } else {
       bcrypt.hash(pass, saltRounds, async (err, hash) => {
         // Store hash in your password DB.
